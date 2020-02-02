@@ -24,7 +24,7 @@ CXX_FLAGS = $(CC_FLAGS) -std=c++17
 # Path definitions
 PSXSDK_PATH = /usr/local/psxsdk
 PATH := $(PATH):$(PSXSDK_PATH)/bin/
-PROJECT_DIR = ~/$(PROJECT)
+PROJECT_DIR = ~/bggj2020
 CDROM_ROOT=$(PROJECT_DIR)/src/cdimg
 BIN_TARGET_PATH = $(PROJECT_DIR)/release
 
@@ -50,11 +50,8 @@ EMULATOR_FLAGS = -nogui -psxout
 OBJ_DIR = obj
 SRC_DIR = .
 OBJECTS = $(addprefix $(OBJ_DIR)/,	\
-			main.o Sfx.o Gfx.o Interrupts.o IO.o SystemInit.o	\
-			Menu.o Game.o FileData.o Player.o Timers.o	\
-			Pad.o Serial.o Camera.o Level.o PlayerCopy.o \
-			Player.o Vector2.o ArrayManager.o Utils.o \
-			AnimatedSprite.o GameEntity.o Controller.o ParticleSystem.o)
+			main.o Sfx.o Gfx.o Interrupts.o IO.o SystemInit.o \
+			Game.o FileData.o Timers.o Serial.o)
 
 # Source dependencies:
 DEPS = $(OBJECTS:.o=.d)
@@ -77,19 +74,18 @@ SOUND_OBJECTS = $(addprefix $(OBJ_SOUNDS_DIR)/,	)
 BMP2TIM = bmp2tim
 SRC_SPRITES_PATH = $(PROJECT_DIR)/src/sprites
 OBJ_SPRITES_PATH = $(CDROM_ROOT)/DATA/SPRITES
-SPRITE_OBJECTS += $(addprefix $(OBJ_SPRITES_PATH)/, tileset.TIM \
-					gatete.TIM font_wh.TIM)
+SPRITE_OBJECTS += $(addprefix $(OBJ_SPRITES_PATH)/, charact.tim)
 
 #Level objects:
 SRC_LEVEL_PATH = $(PROJECT_DIR)/src/levels
 OBJ_LEVEL_PATH = $(CDROM_ROOT)/DATA/LEVELS
-LEVEL_OBJECTS = $(addprefix $(OBJ_LEVEL_PATH)/, level.lvl)
+LEVEL_OBJECTS = $(addprefix $(OBJ_LEVEL_PATH)/,)
 
-# NOTE:	Fonts, despite still being .TIM files, are separated into another folder,
+# NOTE:	Fonts, despite still being .tim files, are separated into another folder,
 # 		so SPRITE_OBJECTS are splitted in two parts.
 OBJ_FONTS_PATH = $(CDROM_ROOT)/DATA/FONTS
-#SPRITE_OBJECTS += $(addprefix $(OBJ_FONTS_PATH)/,	FONT_1.TIM				\
-#													FONT_2.TIM				)
+#SPRITE_OBJECTS += $(addprefix $(OBJ_FONTS_PATH)/,	FONT_1.tim				\
+#													FONT_2.tim				)
 # Instructions
 # ------------------------------------
 
@@ -109,16 +105,15 @@ rebuild:
 #music_objects:	$(addprefix ../Music/, TRACK01.bin TRACK02.bin TRACK03.bin)
 
 clean:
-	rm -f $(EXE_DIR)/*.EXE
+	rm -f $(EXE_DIR)/*.exe
 	rm -f $(EXE_DIR)/*.iso
 	rm -f $(EXE_DIR)/*.elf
 	rm -f $(OBJ_DIR)/*.o
 	rm -f $(OBJ_DIR)/*.d
-	rm -f $(OBJ_SOUNDS_DIR)/*.VAG
-	rm -f $(OBJ_LEVELS_DIR)/*.LVL
-	rm -f $(OBJ_LEVELS_DIR)/*.PLT
-	rm -f $(OBJ_SPRITES_PATH)/*.TIM
-	rm -f $(OBJ_FONTS_PATH)/*.TIM
+	rm -f $(OBJ_SOUNDS_DIR)/*.vag
+	rm -f $(OBJ_LEVELS_DIR)/*.lvl
+	rm -f $(OBJ_SPRITES_PATH)/*.tim
+	rm -f $(OBJ_FONTS_PATH)/*.tim
 
 $(OBJ_DIR)/%.d: $(SRC_DIR)/%.cpp
 	@mkdir -p $(OBJ_DIR)
@@ -144,11 +139,11 @@ $(EXE_PATH)/$(PROJECT).elf: $(OBJECTS)
 	@mkdir -p $(EXE_PATH)
 	$(LINKER) $^ -o $@ $(LIBS) -Wl,--gc-sections
 
-$(EXE_PATH)/$(PROJECT).iso: $(EXE_PATH)/$(PROJECT).EXE $(SOUND_OBJECTS) $(LEVEL_OBJECTS) $(SPRITE_OBJECTS) $(APPS_OBJECTS)
+$(EXE_PATH)/$(PROJECT).iso: $(EXE_PATH)/$(PROJECT).exe $(SOUND_OBJECTS) $(LEVEL_OBJECTS) $(SPRITE_OBJECTS) $(APPS_OBJECTS)
 	@mkdir -p $(EXE_PATH)
 	mkisofs -o $@ -V $(PROJECT) -sysid PLAYSTATION $(CDROM_ROOT)
 
-$(EXE_PATH)/$(PROJECT).EXE: $(EXE_PATH)/$(PROJECT).elf
+$(EXE_PATH)/$(PROJECT).exe: $(EXE_PATH)/$(PROJECT).elf
 	@mkdir -p $(EXE_PATH)
 	$(ELF2EXE) $< $@ $(ELF2EXE_FLAGS)
 	@mkdir -p $(CDROM_ROOT)
@@ -159,7 +154,7 @@ run: $(BIN_TARGET_PATH)/$(PROJECT).bin
 	@mkdir -p $(BIN_TARGET_PATH)
 	$(EMULATOR) -cdfile $(BIN_TARGET_PATH)/$(PROJECT).bin $(EMULATOR_FLAGS)
 
-$(OBJ_SPRITES_PATH)/%.TIM: $(SRC_SPRITES_PATH)/%.bmp $(SRC_SPRITES_PATH)/%.flags
+$(OBJ_SPRITES_PATH)/%.tim: $(SRC_SPRITES_PATH)/%.bmp $(SRC_SPRITES_PATH)/%.flags
 	@mkdir -p $(OBJ_SPRITES_PATH)
 	$(BMP2TIM) $< $@ `cat $(word 2,$^)`
 
@@ -171,11 +166,11 @@ $(OBJ_APPS_PATH)/%.EOL: $(SRC_APPS_PATH)/%.EOL
 	@mkdir -p $(OBJ_APPS_PATH)
 	cp $^ $@
 
-$(OBJ_FONTS_PATH)/%.TIM: $(SRC_SPRITES_PATH)/%.bmp $(SRC_SPRITES_PATH)/%.flags
+$(OBJ_FONTS_PATH)/%.tim: $(SRC_SPRITES_PATH)/%.bmp $(SRC_SPRITES_PATH)/%.flags
 	@mkdir -p $(OBJ_FONTS_PATH)
 	$(BMP2TIM) $< $@ `cat $(word 2,$^)`
 
-$(OBJ_SOUNDS_DIR)/%.VAG: $(SOURCE_SOUNDS_FOLDER)/%.wav $(SOURCE_SOUNDS_FOLDER)/%.flags
+$(OBJ_SOUNDS_DIR)/%.vag: $(SOURCE_SOUNDS_FOLDER)/%.wav $(SOURCE_SOUNDS_FOLDER)/%.flags
 	@mkdir -p $(OBJ_SOUNDS_DIR)
 	wav2vag $< $@ `cat $(word 2,$^)`
 

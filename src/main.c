@@ -11,7 +11,7 @@
  * *************************************/
 
 #include "SystemInit.h"
-#include "Game.hpp"
+#include "Game.h"
 
 /* *************************************
  * Defines
