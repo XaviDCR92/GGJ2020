@@ -11,7 +11,7 @@
  * *************************************/
 
 #include "SystemInit.h"
-#include "Game.h"
+#include "game.h"
 
 /* *************************************
  * Defines
@@ -53,7 +53,7 @@ int main(void)
     for (;;)
     {
         /* Execute the game. */
-        Game();
+        game();
     }
 
     return 0;

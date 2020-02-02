@@ -126,8 +126,12 @@ const uint8_t *IOLoadFile(const char* const strFilePath, size_t* const fileSize)
 #ifndef SERIAL_INTERFACE
 static const uint8_t *IOLoadFileFromCd(char* const buffer, size_t* const fileSize, uint8_t *const fileBuffer)
 {
+    InterruptsDisableInt(INT_SOURCE_VBLANK);
+
     /* Get file data from input file path. */
     FILE* pFile = fopen((char*)buffer, "r");
+
+    InterruptsEnableInt(INT_SOURCE_VBLANK);
 
     if (pFile != NULL)
     {

@@ -50,7 +50,7 @@
 void SystemInit(void)
 {
     /* Initialize PSXSDK libs. */
-    PSX_InitEx(PSX_INIT_CD);
+    PSX_InitEx(PSX_INIT_SAVESTATE | PSX_INIT_CD);
 
     /* Initialize Gfx module. */
     GfxInit();

@@ -418,7 +418,7 @@ static void GfxSetPrimList(void)
     enum
     {
         /* Maximum amount of each low-level primitive data buffer. */
-        PRIMITIVE_LIST_SIZE = 0x800
+        PRIMITIVE_LIST_SIZE = 0x400
     };
 
     /* Buffers that will hold all primitive low-level data. */

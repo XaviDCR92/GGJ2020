@@ -51,7 +51,7 @@ OBJ_DIR = obj
 SRC_DIR = .
 OBJECTS = $(addprefix $(OBJ_DIR)/,	\
 			main.o Sfx.o Gfx.o Interrupts.o IO.o SystemInit.o \
-			Game.o FileData.o Timers.o Serial.o)
+			game.o FileData.o Timers.o Serial.o pad.o)
 
 # Source dependencies:
 DEPS = $(OBJECTS:.o=.d)
@@ -67,23 +67,23 @@ DOXYFILE_PATH = $(PROJECT_DIR)/Documentation/Doxygen
 
 # VAG objects:
 SOURCE_SOUNDS_FOLDER = $(PROJECT_DIR)/src/sounds
-OBJ_SOUNDS_DIR = $(CDROM_ROOT)/DATA/SOUNDS
+OBJ_SOUNDS_DIR = $(CDROM_ROOT)/sounds
 SOUND_OBJECTS = $(addprefix $(OBJ_SOUNDS_DIR)/,	)
 
 # Sprite objects:
 BMP2TIM = bmp2tim
 SRC_SPRITES_PATH = $(PROJECT_DIR)/src/sprites
-OBJ_SPRITES_PATH = $(CDROM_ROOT)/DATA/SPRITES
-SPRITE_OBJECTS += $(addprefix $(OBJ_SPRITES_PATH)/, charact.tim)
+OBJ_SPRITES_PATH = $(CDROM_ROOT)/sprites
+SPRITE_OBJECTS += $(addprefix $(OBJ_SPRITES_PATH)/, charact.tim dungeon.tim)
 
 #Level objects:
 SRC_LEVEL_PATH = $(PROJECT_DIR)/src/levels
-OBJ_LEVEL_PATH = $(CDROM_ROOT)/DATA/LEVELS
-LEVEL_OBJECTS = $(addprefix $(OBJ_LEVEL_PATH)/,)
+OBJ_LEVEL_PATH = $(CDROM_ROOT)/LEVELS
+LEVEL_OBJECTS = $(addprefix $(OBJ_LEVEL_PATH)/, level1.lvl)
 
 # NOTE:	Fonts, despite still being .tim files, are separated into another folder,
 # 		so SPRITE_OBJECTS are splitted in two parts.
-OBJ_FONTS_PATH = $(CDROM_ROOT)/DATA/FONTS
+OBJ_FONTS_PATH = $(CDROM_ROOT)/FONTS
 #SPRITE_OBJECTS += $(addprefix $(OBJ_FONTS_PATH)/,	FONT_1.tim				\
 #													FONT_2.tim				)
 # Instructions
